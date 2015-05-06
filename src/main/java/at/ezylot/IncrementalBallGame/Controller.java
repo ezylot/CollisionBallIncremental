@@ -3,8 +3,12 @@ package at.ezylot.IncrementalBallGame;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.EventHandler;
+import javafx.event.EventTarget;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -28,6 +32,11 @@ public class Controller {
             "red", "blue", "green"
     };
 
+
+    public int speed = 1;
+    public int explosionSize = 10;
+
+
     public void initialize() {
         Timeline runCycle = new Timeline(new KeyFrame(Duration.millis(20), e->moveBalls()));
         runCycle.setCycleCount(Timeline.INDEFINITE);
@@ -35,7 +44,17 @@ public class Controller {
 
         String color = colors[(new Random()).nextInt(colors.length)];
 
-        MovableCircle l = new MovableCircle(4,5,3, Paint.valueOf(color), 45);
+        MovableCircle l = new MovableCircle(40,50,15, Paint.valueOf(color), 45);
+        l.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                    EventTarget a = mouseEvent.getTarget();
+                    ((MovableCircle)a).setRadius(((MovableCircle) a).getRadius()+ explosionSize);
+                }
+            }
+        });
+
         playscreen.getChildren().add(l);
 
     }
