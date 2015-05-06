@@ -1,8 +1,8 @@
 package at.ezylot.IncrementalBallGame;
 
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
-import java.awt.*;
 import java.util.Vector;
 
 public class MovableCircle extends Circle {
@@ -17,8 +17,8 @@ public class MovableCircle extends Circle {
 
     private double moveDegree = 0;
 
-    public MovableCircle(double x, double y, double radius, double moveDegree) {
-        super(x, y, radius);
+    public MovableCircle(double x, double y, double radius, Paint p, double moveDegree) {
+        super(x, y, radius, p);
         this.setMoveDegree(moveDegree);
     }
 

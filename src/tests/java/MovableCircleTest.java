@@ -1,5 +1,6 @@
 package at.ezylot.IncrementalBallGame;
 
+import javafx.scene.paint.Paint;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -12,8 +13,8 @@ public class MovableCircleTest {
     @Test()
     public void TestCollision() {
 
-        MovableCircle a = new MovableCircle(0, 0, 0.5, 0);
-        MovableCircle b = new MovableCircle(1, 0, 0.5, 0);
+        MovableCircle a = new MovableCircle(0, 0, 0.5, Paint.valueOf("lightgrey"), 0);
+        MovableCircle b = new MovableCircle(1, 0, 0.5, Paint.valueOf("lightgrey"), 0);
 
         Assert.assertTrue(a.collides(b));
 
@@ -29,7 +30,7 @@ public class MovableCircleTest {
 
     @Test()
     public void TestMoveCircle() {
-        MovableCircle a = new MovableCircle(0, 0, 0.5, 0);
+        MovableCircle a = new MovableCircle(0, 0, 0.5, Paint.valueOf("lightgrey"), 0);
 
         a.move(1);
         Assert.assertEquals(1.0, a.getCenterX(), 0.0001);
