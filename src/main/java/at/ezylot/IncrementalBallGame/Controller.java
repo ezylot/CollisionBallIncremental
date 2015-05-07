@@ -15,6 +15,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -32,16 +33,14 @@ public class Controller {
     public int speed = 1;
     public int explosionSize = 10;
 
+    public Timeline runCycle;
 
     public void initialize() {
-        Timeline runCycle = new Timeline(new KeyFrame(Duration.millis(20), e->moveBalls()));
+        runCycle = new Timeline(new KeyFrame(Duration.millis(25), e->tick()));
         runCycle.setCycleCount(Timeline.INDEFINITE);
         runCycle.play();
 
-        balls.add(MovableCircleFactory.createMovableCircle(14, 12, 11));
-        balls.add(MovableCircleFactory.createMovableCircle(14, 023, 18));
-        balls.add(MovableCircleFactory.createMovableCircle(54, 59, 6));
-        balls.add(MovableCircleFactory.createMovableCircle(146, 31, 12));
+        balls.add(MovableCircleFactory.createMovableCircle(50, 50, 11));
 
 
         for(MovableCircle c : balls) {
@@ -65,19 +64,31 @@ public class Controller {
 
     }
 
-    public void moveBalls() {
+    public void tick() {
+        ArrayList<MovableCircle> ballsToBeRemoved = new ArrayList<>();
         for(MovableCircle ball : balls) {
             if(ball.isExploded()) {
+                if(ball.tickExploded())
+                    ballsToBeRemoved.add(ball);
+
                 MovableCircle c = collidesWithOtherBalls(ball);
-                if(c != null && c.isExploded() == false) {
-                    c.explode();
+                if(c != null) {
+                    if(c.isExploded() == false)
+                        c.explode();
                 }
             } else {
-                ball.move(10);
+                ball.move(2);
                 if(ball.touchesWall())
                     ball.bounceOff();
             }
         }
+
+
+        for(MovableCircle ball: ballsToBeRemoved) {
+            ball.setCenterX(-10000);
+            ball.setCenterY(-10000);
+        }
+        balls.removeAll(ballsToBeRemoved);
     }
 
     public MovableCircle collidesWithOtherBalls(MovableCircle c) {

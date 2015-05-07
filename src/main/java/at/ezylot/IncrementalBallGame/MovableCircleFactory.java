@@ -15,6 +15,6 @@ public class MovableCircleFactory {
         };
         String color = colors[(new Random()).nextInt(colors.length)];
 
-        return new MovableCircle(x, y, radius, Paint.valueOf(color), (new Random()).nextInt(359), Main.RootStage.getScene());
+        return new MovableCircle(x, y, radius, Paint.valueOf(color), (new Random()).nextInt(359), Main.RootStage);
     }
 }

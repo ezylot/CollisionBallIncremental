@@ -1,12 +1,22 @@
 package at.ezylot.IncrementalBallGame;
 
-import javafx.scene.Scene;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
-
-import java.util.Vector;
+import javafx.stage.Stage;
 
 public class MovableCircle extends Circle {
+
+    private double explosionRate = 1.5;
+    private int explosionTick = 0;
+    private Stage rootStage;
+    private boolean exploded = false;
+    private double moveDegree = 0;
+
+    public MovableCircle(double x, double y, double radius, Paint p, double moveDegree, Stage rootStage) {
+        super(x, y, radius, p);
+        this.setMoveDegree(moveDegree);
+        this.rootStage = rootStage;
+    }
 
     public double getExplosionRate() {
         return explosionRate;
@@ -16,21 +26,15 @@ public class MovableCircle extends Circle {
         this.explosionRate = explosionRate;
     }
 
-    private double explosionRate = 1.5;
-
     public boolean isExploded() {
         return exploded;
     }
 
-    private Scene rootScene;
-
     public void explode() {
         this.exploded = true;
         this.setFill(Paint.valueOf("red"));
-        this.setRadius(this.getRadius()*this.getExplosionRate());
+        this.setRadius(this.getRadius() * this.getExplosionRate());
     }
-
-    private boolean exploded = false;
 
     public double getMoveDegree() {
         return moveDegree;
@@ -40,22 +44,21 @@ public class MovableCircle extends Circle {
         this.moveDegree = moveDegree;
     }
 
-    private double moveDegree = 0;
-
-    public MovableCircle(double x, double y, double radius, Paint p, double moveDegree, Scene rootScene) {
-        super(x, y, radius, p);
-        this.setMoveDegree(moveDegree);
-        this.rootScene = rootScene;
+    public boolean tickExploded() {
+        if (explosionTick > 30)
+            return true;
+        explosionTick++;
+        return false;
     }
 
     public boolean touchesWall() {
-        if(this.getCenterX() - getRadius() <= 0)
+        if (this.getCenterX() <= 0)
             return true;
-        if(this.getCenterX() + getRadius() >= rootScene.getWidth())
+        if (this.getCenterX() >= rootStage.getScene().getWidth())
             return true;
-        if(this.getCenterY() + getRadius() >= rootScene.getHeight())
+        if (this.getCenterY() >= rootStage.getScene().getHeight())
             return true;
-        if(this.getCenterY() - getRadius() <= 0)
+        if (this.getCenterY() <= 0)
             return true;
 
         return false;
@@ -64,10 +67,10 @@ public class MovableCircle extends Circle {
     public void bounceOff() {
 
         double newDegree = 0;
-        if(this.getCenterX() - getRadius() <= 0 || this.getCenterX() + getRadius() >= rootScene.getWidth())
-            newDegree = 90+(90-this.getMoveDegree())%360;
-        if(this.getCenterY() + getRadius() >= rootScene.getHeight() || this.getCenterY() - getRadius() <= 0)
-            newDegree = 180+(180-this.getMoveDegree())%360;
+        if (this.getCenterX() <= 0 || this.getCenterX() >= rootStage.getScene().getWidth())
+            newDegree = 90 + (90 - this.getMoveDegree()) % 360;
+        if (this.getCenterY() + getRadius() >= rootStage.getScene().getHeight() || this.getCenterY() - getRadius() <= 0)
+            newDegree = 180 + (180 - this.getMoveDegree()) % 360;
 
         this.setMoveDegree(newDegree);
     }
@@ -76,11 +79,11 @@ public class MovableCircle extends Circle {
         double deltaX = this.getCenterX() - b.getCenterX();
         double deltaY = this.getCenterY() - b.getCenterY();
 
-        deltaX = (deltaX < 0) ? deltaX*-1 : deltaX;
-        deltaY = (deltaY < 0) ? deltaY*-1 : deltaY;
+        deltaX = (deltaX < 0) ? deltaX * -1 : deltaX;
+        deltaY = (deltaY < 0) ? deltaY * -1 : deltaY;
 
-        double delta = Math.sqrt(Math.pow(deltaX,2)+Math.pow(deltaY, 2));
-        if(delta-this.getRadius()-b.getRadius() <= 0)
+        double delta = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+        if (delta - this.getRadius() - b.getRadius() <= 0)
             return true;
         return false;
     }
@@ -89,14 +92,7 @@ public class MovableCircle extends Circle {
         this.setCenterY(this.getCenterY() + Math.sin(Math.toRadians(this.getMoveDegree())) * speed);
         this.setCenterX(this.getCenterX() + Math.cos(Math.toRadians(this.getMoveDegree())) * speed);
 
-        if(this.getCenterY() > rootScene.getHeight())
-            this.setCenterY(rootScene.getHeight());
-        if(this.getCenterY() < 0)
-            this.setCenterY(0);
-        if(this.getCenterX() > rootScene.getWidth())
-            this.setCenterY(rootScene.getWidth());
-        if(this.getCenterX() < 0)
-            this.setCenterY(0);
+
     }
 
 
