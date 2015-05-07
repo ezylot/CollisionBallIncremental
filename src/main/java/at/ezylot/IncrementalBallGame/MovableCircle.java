@@ -45,7 +45,7 @@ public class MovableCircle extends Circle {
     }
 
     public boolean tickExploded() {
-        if (explosionTick > 30)
+        if (explosionTick > 100000)
             return true;
         explosionTick++;
         return false;
@@ -92,7 +92,14 @@ public class MovableCircle extends Circle {
         this.setCenterY(this.getCenterY() + Math.sin(Math.toRadians(this.getMoveDegree())) * speed);
         this.setCenterX(this.getCenterX() + Math.cos(Math.toRadians(this.getMoveDegree())) * speed);
 
-
+        if(this.getCenterY() > rootStage.getScene().getHeight())
+            this.setCenterY( rootStage.getScene().getHeight());
+        if(this.getCenterY() < 0)
+            this.setCenterY(0);
+        if(this.getCenterX() >  rootStage.getScene().getWidth())
+            this.setCenterX( rootStage.getScene().getWidth());
+        if(this.getCenterX() < 0)
+            this.setCenterX(0);
     }
 
 
