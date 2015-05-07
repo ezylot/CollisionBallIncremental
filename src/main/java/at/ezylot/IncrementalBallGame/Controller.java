@@ -16,6 +16,7 @@ import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
 import java.lang.reflect.Array;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -33,16 +34,21 @@ public class Controller {
     public int speed = 1;
     public int explosionSize = 10;
 
+    public double combo = 1.0;
+
     public Timeline runCycle;
 
+    public int anzahlKuglen = 50;
+
     public void initialize() {
-        runCycle = new Timeline(new KeyFrame(Duration.millis(25), e->tick()));
+        runCycle = new Timeline(new KeyFrame(Duration.millis(5), e->tick()));
         runCycle.setCycleCount(Timeline.INDEFINITE);
         runCycle.play();
 
-        balls.add(MovableCircleFactory.createMovableCircle(50, 50, 11));
-
-
+        for(int i = 0; i < anzahlKuglen; i++) {
+            SecureRandom r = new SecureRandom();
+            balls.add(MovableCircleFactory.createMovableCircle(r.nextDouble()*200, r.nextDouble()*300, 11));
+        }
         for(MovableCircle c : balls) {
             c.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
@@ -71,13 +77,19 @@ public class Controller {
                 if(ball.tickExploded())
                     ballsToBeRemoved.add(ball);
 
-                MovableCircle c = collidesWithOtherBalls(ball);
-                if(c != null) {
-                    if(c.isExploded() == false)
-                        c.explode();
+                ArrayList<MovableCircle> cc = collidesWithOtherBalls(ball);
+                if(cc.size() != 0) {
+                    for(MovableCircle c : cc) {
+                        if (c.isExploded() == false) {
+                            c.explode();
+                            Double Score = Double.parseDouble(lblScore.getText());
+                            Score = Score + combo;
+                            lblScore.setText(Score + "");
+                        }
+                    }
                 }
             } else {
-                ball.move(2);
+                ball.move(0.8);
                 if(ball.touchesWall())
                     ball.bounceOff();
             }
@@ -91,13 +103,14 @@ public class Controller {
         balls.removeAll(ballsToBeRemoved);
     }
 
-    public MovableCircle collidesWithOtherBalls(MovableCircle c) {
+    public ArrayList<MovableCircle> collidesWithOtherBalls(MovableCircle c) {
+        ArrayList<MovableCircle> collisions = new ArrayList<>();
         for(MovableCircle ball : balls) {
             if(!ball.equals(c)) {
                 if(c.collides(ball))
-                    return ball;
+                    collisions.add(ball);
             }
         }
-        return null;
+        return collisions;
     }
 }
