@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
@@ -28,11 +29,6 @@ public class Controller {
     public Label lblMultiplier;
     public Label lblScore;
 
-    public String[] colors = new String[] {
-            "red", "blue", "green"
-    };
-
-
     public int speed = 1;
     public int explosionSize = 10;
 
@@ -42,28 +38,55 @@ public class Controller {
         runCycle.setCycleCount(Timeline.INDEFINITE);
         runCycle.play();
 
-        String color = colors[(new Random()).nextInt(colors.length)];
+        balls.add(MovableCircleFactory.createMovableCircle(14, 12, 11));
+        balls.add(MovableCircleFactory.createMovableCircle(14, 023, 18));
+        balls.add(MovableCircleFactory.createMovableCircle(54, 59, 6));
+        balls.add(MovableCircleFactory.createMovableCircle(146, 31, 12));
 
-        MovableCircle l = new MovableCircle(40,50,15, Paint.valueOf(color), 45);
-        l.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
-                    EventTarget a = mouseEvent.getTarget();
-                    ((MovableCircle)a).setRadius(((MovableCircle) a).getRadius()+ explosionSize);
+
+        for(MovableCircle c : balls) {
+            c.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                        EventTarget a = mouseEvent.getTarget();
+                        if (!((MovableCircle) a).isExploded()) {
+                            ((MovableCircle) a).explode();
+                            double score = Double.parseDouble(lblScore.getText());
+                            double multiplier = Double.parseDouble(lblMultiplier.getText());
+                            lblScore.setText((score + 1 * multiplier) + "");
+                        }
+                    }
                 }
-            }
-        });
+            });
+        }
+        playscreen.getChildren().addAll(balls);
 
-        playscreen.getChildren().add(l);
 
     }
 
     public void moveBalls() {
-        for(Object o : playscreen.getChildren()) {
-            if(o instanceof MovableCircle) {
-                ((MovableCircle) o).move(1);
+        for(MovableCircle ball : balls) {
+            if(ball.isExploded()) {
+                MovableCircle c = collidesWithOtherBalls(ball);
+                if(c != null && c.isExploded() == false) {
+                    c.explode();
+                }
+            } else {
+                ball.move(10);
+                if(ball.touchesWall())
+                    ball.bounceOff();
             }
         }
+    }
+
+    public MovableCircle collidesWithOtherBalls(MovableCircle c) {
+        for(MovableCircle ball : balls) {
+            if(!ball.equals(c)) {
+                if(c.collides(ball))
+                    return ball;
+            }
+        }
+        return null;
     }
 }
