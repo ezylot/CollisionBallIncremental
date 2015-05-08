@@ -15,7 +15,8 @@ public class Main extends Application {
         RootStage = primaryStage;
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Collision Ball Incremental");
-        primaryStage.setScene(new Scene(root, 600, 400));
+        primaryStage.setScene(new Scene(root, 600, 480));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

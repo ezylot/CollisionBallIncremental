@@ -45,7 +45,7 @@ public class MovableCircle extends Circle {
     }
 
     public boolean tickExploded() {
-        if (explosionTick > 100000)
+        if (explosionTick > 70)
             return true;
         explosionTick++;
         return false;
