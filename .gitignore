@@ -4,4 +4,5 @@ lib
 *.iml
 *.ipr
 *.iws
+.gradle/
 build/
