@@ -1,4 +1,4 @@
-package at.ezylot.IncrementalBallGame;
+package at.ezylot.ibg;
 
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -32,7 +32,7 @@ public class MovableCircle extends Circle {
 
     public void explode() {
         this.exploded = true;
-        this.setFill(Paint.valueOf("red"));
+        this.setFill(Paint.valueOf("#AA3939"));
         this.setRadius(this.getRadius() * this.getExplosionRate());
     }
 
@@ -45,7 +45,7 @@ public class MovableCircle extends Circle {
     }
 
     public boolean tickExploded() {
-        if (explosionTick > 70)
+        if (explosionTick > 13)
             return true;
         explosionTick++;
         return false;

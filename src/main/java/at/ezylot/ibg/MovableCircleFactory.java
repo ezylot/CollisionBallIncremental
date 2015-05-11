@@ -1,4 +1,4 @@
-package at.ezylot.IncrementalBallGame;
+package at.ezylot.ibg;
 
 import javafx.scene.paint.Paint;
 
@@ -8,11 +8,9 @@ import java.util.Random;
 public class MovableCircleFactory {
     public static MovableCircle createMovableCircle(double x, double y, double radius) {
         String[] colors = new String[] {
-            "green",
-            "blue",
-            "orange",
-            "grey",
-            "brown"
+            "#AA5585",
+            "#55AA55",
+            "A5C663"
         };
         String color = colors[(new Random()).nextInt(colors.length)];
         SecureRandom random = new SecureRandom();
