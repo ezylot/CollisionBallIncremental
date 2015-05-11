@@ -1,22 +1,16 @@
-package at.ezylot.IncrementalBallGame;
+package at.ezylot.ibg;
 
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
-import java.lang.reflect.Array;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -38,7 +32,7 @@ public class Controller {
 
     public Timeline runCycle;
 
-    public int anzahlKuglen = 200;
+    public int anzahlKuglen = 2000;
 
     public void initialize() {
         runCycle = new Timeline(new KeyFrame(Duration.millis(33), e->tick()));
@@ -52,7 +46,7 @@ public class Controller {
         MovableCircle mc;
         for(int i = balls.size(); i < anzahlKuglen; i++) {
             Random r = new Random();
-            mc = MovableCircleFactory.createMovableCircle(r.nextDouble()*Main.RootStage.getScene().getWidth(), r.nextDouble()*Main.RootStage.getScene().getHeight(), 11);
+            mc = MovableCircleFactory.createMovableCircle(r.nextDouble()*Main.RootStage.getScene().getWidth(), r.nextDouble()*Main.RootStage.getScene().getHeight(), 10);
             mc.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {

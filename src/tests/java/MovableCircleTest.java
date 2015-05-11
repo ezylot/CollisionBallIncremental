@@ -1,25 +1,22 @@
-import at.ezylot.IncrementalBallGame.MovableCircle;
-import at.ezylot.IncrementalBallGame.MovableCircleFactory;
-import javafx.scene.paint.Paint;
-import org.junit.Assert;
-import org.junit.Test;
+    import at.ezylot.ibg.MovableCircle;
+    import at.ezylot.ibg.MovableCircleFactory;
+    import org.junit.Assert;
+    import org.junit.Test;
 
-import static org.junit.Assert.*;
+    /**
+     *
+     */
+    public class MovableCircleTest {
+        @Test()
+        public void TestCollision() {
 
-/**
- *
- */
-public class MovableCircleTest {
-    @Test()
-    public void TestCollision() {
+            MovableCircle a = MovableCircleFactory.createMovableCircle(0, 0, 0.5);
+            MovableCircle b = MovableCircleFactory.createMovableCircle(1, 0, 0.5);
 
-        MovableCircle a = MovableCircleFactory.createMovableCircle(0, 0, 0.5);
-        MovableCircle b = MovableCircleFactory.createMovableCircle(1, 0, 0.5);
+            Assert.assertTrue(a.collides(b));
 
-        Assert.assertTrue(a.collides(b));
-
-        b.setCenterX(1.1);
-        Assert.assertFalse(a.collides(b));
+            b.setCenterX(1.1);
+            Assert.assertFalse(a.collides(b));
 
         b.setCenterX(0.9);
         Assert.assertTrue(a.collides(b));

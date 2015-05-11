@@ -9,7 +9,7 @@
 <?import javafx.scene.control.Label?>
 
 
-<Pane fx:controller="at.ezylot.IncrementalBallGame.Controller" fx:id="playscreen" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:controller="at.ezylot.ibg.Controller" fx:id="playscreen" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane fx:id="scorescreen" layoutX="374.0" prefHeight="69.0" prefWidth="226.0"
             style="-fx-background-color: lightgrey;">
