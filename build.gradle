@@ -1,12 +1,14 @@
-apply plugin: 'war'
-apply plugin: 'jetty'
-apply plugin: 'idea'
-
 allprojects {
     apply plugin: 'java'
 }
 
+apply plugin: 'application'
+apply plugin: 'distribution'
+apply plugin: 'idea'
+
 version = '0.0.0'
+
+mainClassName = "at.ezylot.ibg.Main"
 
 repositories {
     mavenCentral()
