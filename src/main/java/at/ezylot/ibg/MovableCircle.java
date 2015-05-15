@@ -12,6 +12,8 @@ public class MovableCircle extends Circle {
     private boolean exploded = false;
     private double moveDegree = 0;
 
+    public static int maxExplosionTicks = 10;
+
     public MovableCircle(double x, double y, double radius, Paint p, double moveDegree, Stage rootStage) {
         super(x, y, radius, p);
         this.setMoveDegree(moveDegree);
@@ -45,7 +47,7 @@ public class MovableCircle extends Circle {
     }
 
     public boolean tickExploded() {
-        if (explosionTick > 13)
+        if (explosionTick > maxExplosionTicks)
             return true;
         explosionTick++;
         return false;

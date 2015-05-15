@@ -3,6 +3,7 @@ package at.ezylot.ibg;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
 import javafx.scene.control.Label;
@@ -12,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -32,7 +34,10 @@ public class Controller {
 
     public Timeline runCycle;
 
-    public int anzahlKuglen = 2000;
+    public int anzahlKuglen = 1500;
+
+
+    private ArrayList<MovableCircle> collisions = new ArrayList<>();
 
     public void initialize() {
         runCycle = new Timeline(new KeyFrame(Duration.millis(33), e->tick()));
@@ -66,21 +71,15 @@ public class Controller {
             mc.toBack();
         }
 
-        long delta = System.nanoTime() - start;
-        if(delta > 1000) System.out.println("Balls created: \t\t\t" + delta);
-        start = System.nanoTime();
-
-        for(MovableCircle ball : balls) {
-            if(!ball.isExploded()) {
-                ball.move(2);
-                if (ball.touchesWall())
-                    ball.bounceOff();
+        MovableCircle ballToMove;
+        for(int i = 0; i < balls.size(); i++) {
+            ballToMove = balls.get(i);
+            if(!ballToMove.isExploded()) {
+                ballToMove.move(2);
+                if (ballToMove.touchesWall())
+                    ballToMove.bounceOff();
             }
         }
-
-        delta = System.nanoTime() - start;
-        if(delta > 1000) System.out.println("Balls moved: \t\t\t" + delta);
-        start = System.nanoTime();
 
         ArrayList<MovableCircle> ballsToBeRemoved = new ArrayList<>();
 
@@ -88,46 +87,38 @@ public class Controller {
             if(ball.isExploded()) {
                 if (ball.tickExploded()) {
                     ballsToBeRemoved.add(ball);
-                    continue;
+                    playscreen.getChildren().remove(ball);
                 }
             }
         }
-
-        for(MovableCircle ball: ballsToBeRemoved) {
-            playscreen.getChildren().remove(ball);
-        }
         balls.removeAll(ballsToBeRemoved);
 
-        delta = System.nanoTime() - start;
-        if(delta > 1000) System.out.println("Timed out balls clean: \t" + delta);
-        start = System.nanoTime();
-
+        Double Score = Double.parseDouble(lblScore.getText());
 
         for(MovableCircle ball : balls) {
             if(ball.isExploded()) {
 
                 ArrayList<MovableCircle> cc = collidesWithOtherBalls(ball);
-                for(MovableCircle c : cc) {
+                MovableCircle c;
+                for(int i = 0; i < cc.size(); i++) {
+                    c = cc.get(i);
                     c.explode();
-                    Double Score = Double.parseDouble(lblScore.getText());
                     Score = Score + combo;
-                    lblScore.setText(Score + "");
                 }
             }
         }
-        delta = System.nanoTime() - start;
-        if(delta > 1000) System.out.println("Explosion processed: \t" + delta);
+        lblScore.setText(Score + "");
     }
 
     public ArrayList<MovableCircle> collidesWithOtherBalls(MovableCircle c) {
-        ArrayList<MovableCircle> collisions = new ArrayList<>();
-        for(MovableCircle ball : balls) {
+        collisions.clear();
+        MovableCircle ball;
+        for(int i = 0; i < balls.size();i++) {
+            ball = balls.get(i);
             if(!ball.equals(c)) {
                 if(!ball.isExploded()) {
                     if (c.collides(ball))
                         collisions.add(ball);
-                } else {
-                    continue;
                 }
             }
         }
