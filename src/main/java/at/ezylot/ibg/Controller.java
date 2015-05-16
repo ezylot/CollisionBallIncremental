@@ -71,43 +71,38 @@ public class Controller {
             mc.toBack();
         }
 
-        MovableCircle ballToMove;
-        for(int i = 0; i < balls.size(); i++) {
-            ballToMove = balls.get(i);
-            if(!ballToMove.isExploded()) {
-                ballToMove.move(2);
-                if (ballToMove.touchesWall())
-                    ballToMove.bounceOff();
-            }
-        }
-
+        MovableCircle ball;
         ArrayList<MovableCircle> ballsToBeRemoved = new ArrayList<>();
+        Double Score = Double.parseDouble(lblScore.getText());
 
-        for(MovableCircle ball : balls) {
-            if(ball.isExploded()) {
+        for(int i = 0; i < balls.size(); i++) {
+            ball = balls.get(i);
+            if(!ball.isExploded()) {
+                this.moveBall(ball);
+            } else {
                 if (ball.tickExploded()) {
                     ballsToBeRemoved.add(ball);
                     playscreen.getChildren().remove(ball);
                 }
-            }
-        }
-        balls.removeAll(ballsToBeRemoved);
-
-        Double Score = Double.parseDouble(lblScore.getText());
-
-        for(MovableCircle ball : balls) {
-            if(ball.isExploded()) {
-
                 ArrayList<MovableCircle> cc = collidesWithOtherBalls(ball);
                 MovableCircle c;
-                for(int i = 0; i < cc.size(); i++) {
-                    c = cc.get(i);
+                for(int a = 0; a < cc.size(); a++) {
+                    c = cc.get(a);
                     c.explode();
                     Score = Score + combo;
                 }
             }
         }
+
+        balls.removeAll(ballsToBeRemoved);
+        ballsToBeRemoved.clear();
         lblScore.setText(Score + "");
+    }
+
+    private void moveBall(MovableCircle ball) {
+        ball.move(2);
+        if (ball.touchesWall())
+            ball.bounceOff();
     }
 
     public ArrayList<MovableCircle> collidesWithOtherBalls(MovableCircle c) {
