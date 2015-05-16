@@ -12,7 +12,7 @@ public class MovableCircle extends Circle {
     private boolean exploded = false;
     private double moveDegree = 0;
 
-    public static int maxExplosionTicks = 10;
+    public static int maxExplosionTicks = 16;
 
     public MovableCircle(double x, double y, double radius, Paint p, double moveDegree, Stage rootStage) {
         super(x, y, radius, p);

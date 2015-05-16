@@ -3,6 +3,7 @@ package at.ezylot.ibg;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
@@ -34,24 +35,36 @@ public class Controller {
 
     public Timeline runCycle;
 
-    public int anzahlKuglen = 1500;
+    public int anzahlKuglen = 500;
 
 
     private ArrayList<MovableCircle> collisions = new ArrayList<>();
 
     public void initialize() {
-        runCycle = new Timeline(new KeyFrame(Duration.millis(33), e->tick()));
+        runCycle = new Timeline(new KeyFrame(Duration.millis(16), e->tick()));
         runCycle.setCycleCount(Timeline.INDEFINITE);
         runCycle.play();
         scorescreen.toFront();
     }
+
+    public Main getMainApp() {
+        return mainApp;
+    }
+
+    public void setMainApp(Main mainApp) {
+        this.mainApp = mainApp;
+    }
+
+    private Main mainApp;
 
     public void tick() {
         long start = System.nanoTime();
         MovableCircle mc;
         for(int i = balls.size(); i < anzahlKuglen; i++) {
             Random r = new Random();
-            mc = MovableCircleFactory.createMovableCircle(r.nextDouble()*Main.RootStage.getScene().getWidth(), r.nextDouble()*Main.RootStage.getScene().getHeight(), 10);
+            double width = this.getMainApp().getRootStage().getScene().getWidth();
+            double height = this.getMainApp().getRootStage().getScene().getHeight();
+            mc = MovableCircleFactory.createMovableCircle(r.nextDouble() * width, r.nextDouble() * height, 10, this.getMainApp().getRootStage());
             mc.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
@@ -100,7 +113,7 @@ public class Controller {
     }
 
     private void moveBall(MovableCircle ball) {
-        ball.move(2);
+        ball.move(1);
         if (ball.touchesWall())
             ball.bounceOff();
     }
