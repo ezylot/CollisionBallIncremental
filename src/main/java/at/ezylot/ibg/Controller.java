@@ -35,13 +35,13 @@ public class Controller {
 
     public Timeline runCycle;
 
-    public int anzahlKuglen = 500;
+    public int anzahlKuglen = 3000;
 
 
     private ArrayList<MovableCircle> collisions = new ArrayList<>();
 
     public void initialize() {
-        runCycle = new Timeline(new KeyFrame(Duration.millis(16), e->tick()));
+        runCycle = new Timeline(new KeyFrame(Duration.millis(33), e->tick()));
         runCycle.setCycleCount(Timeline.INDEFINITE);
         runCycle.play();
         scorescreen.toFront();
@@ -94,8 +94,7 @@ public class Controller {
                 this.moveBall(ball);
             } else {
                 if (ball.tickExploded()) {
-                    ballsToBeRemoved.add(ball);
-                    playscreen.getChildren().remove(ball);
+                    ball.reset();
                 }
                 ArrayList<MovableCircle> cc = collidesWithOtherBalls(ball);
                 MovableCircle c;
@@ -107,8 +106,6 @@ public class Controller {
             }
         }
 
-        balls.removeAll(ballsToBeRemoved);
-        ballsToBeRemoved.clear();
         lblScore.setText(Score + "");
     }
 

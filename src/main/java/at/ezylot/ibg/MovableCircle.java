@@ -4,18 +4,22 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
+import java.util.Random;
+
 public class MovableCircle extends Circle {
 
-    private double explosionRate = 1.5;
+    private double explosionRate = 1.8;
     private int explosionTick = 0;
     private Stage rootStage;
     private boolean exploded = false;
     private double moveDegree = 0;
+    private Paint originalColor;
 
     public static int maxExplosionTicks = 16;
 
     public MovableCircle(double x, double y, double radius, Paint p, double moveDegree, Stage rootStage) {
         super(x, y, radius, p);
+        originalColor = p;
         this.setMoveDegree(moveDegree);
         this.rootStage = rootStage;
     }
@@ -104,5 +108,16 @@ public class MovableCircle extends Circle {
             this.setCenterX(0);
     }
 
+    public void reset() {
+        Random r = new Random();
+
+        this.setCenterX(r.nextDouble() * this.rootStage.getScene().getWidth());
+        this.setCenterY(r.nextDouble() * this.rootStage.getScene().getHeight());
+        this.exploded = false;
+        this.setFill(originalColor);
+        this.setRadius(this.getRadius() / this.getExplosionRate());
+        this.explosionTick = 0;
+
+    }
 
 }
