@@ -28,20 +28,15 @@ public class Controller {
     public Label lblMultiplier;
     public Label lblScore;
 
-    public int speed = 1;
-    public int explosionSize = 10;
-
     public double combo = 1.0;
 
     public Timeline runCycle;
-
-    public int anzahlKuglen = 3000;
 
 
     private ArrayList<MovableCircle> collisions = new ArrayList<>();
 
     public void initialize() {
-        runCycle = new Timeline(new KeyFrame(Duration.millis(33), e->tick()));
+        runCycle = new Timeline(new KeyFrame(Duration.millis(1000 / Setting.FPS_CAP), e->tick()));
         runCycle.setCycleCount(Timeline.INDEFINITE);
         runCycle.play();
         scorescreen.toFront();
@@ -58,24 +53,20 @@ public class Controller {
     private Main mainApp;
 
     public void tick() {
-        long start = System.nanoTime();
         MovableCircle mc;
-        for(int i = balls.size(); i < anzahlKuglen; i++) {
+        for(int i = balls.size(); i < Setting.AMOUNT_BALLS; i++) {
             Random r = new Random();
             double width = this.getMainApp().getRootStage().getScene().getWidth();
             double height = this.getMainApp().getRootStage().getScene().getHeight();
             mc = MovableCircleFactory.createMovableCircle(r.nextDouble() * width, r.nextDouble() * height, 10, this.getMainApp().getRootStage());
-            mc.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                        EventTarget a = mouseEvent.getTarget();
-                        if (!((MovableCircle) a).isExploded()) {
-                            ((MovableCircle) a).explode();
-                            double score = Double.parseDouble(lblScore.getText());
-                            double multiplier = Double.parseDouble(lblMultiplier.getText());
-                            lblScore.setText((score + 1 * multiplier) + "");
-                        }
+            mc.setOnMouseClicked(mouseEvent -> {
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                    EventTarget a = mouseEvent.getTarget();
+                    if (!((MovableCircle) a).isExploded()) {
+                        ((MovableCircle) a).explode();
+                        double score = Double.parseDouble(lblScore.getText());
+                        double multiplier = Double.parseDouble(lblMultiplier.getText());
+                        lblScore.setText((score + 1 * multiplier) + "");
                     }
                 }
             });
@@ -85,7 +76,6 @@ public class Controller {
         }
 
         MovableCircle ball;
-        ArrayList<MovableCircle> ballsToBeRemoved = new ArrayList<>();
         Double Score = Double.parseDouble(lblScore.getText());
 
         for(int i = 0; i < balls.size(); i++) {
@@ -110,7 +100,7 @@ public class Controller {
     }
 
     private void moveBall(MovableCircle ball) {
-        ball.move(1);
+        ball.move(Setting.SPEED);
         if (ball.touchesWall())
             ball.bounceOff();
     }
