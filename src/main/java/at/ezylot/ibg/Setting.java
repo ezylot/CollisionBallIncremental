@@ -1,9 +1,9 @@
 package at.ezylot.ibg;
 
-/**
- *
- */
-public class Setting {
+public final class Setting {
+
+    private Setting() { }
+
     public static final int SCENE_WIDTH = 600;
     public static final int SCENE_HEIGHT = 480;
     public static final int FPS_CAP = 30;
