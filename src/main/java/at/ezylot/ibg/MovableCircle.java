@@ -8,28 +8,20 @@ import java.util.Random;
 
 public class MovableCircle extends Circle {
 
-    private double explosionRate = 1.8;
     private int explosionTick = 0;
     private Stage rootStage;
     private boolean exploded = false;
     private double moveDegree = 0;
-    private Paint originalColor;
 
-    public static int maxExplosionTicks = 16;
+    private double originalRadius;
+    private Paint originalColor;
 
     public MovableCircle(double x, double y, double radius, Paint p, double moveDegree, Stage rootStage) {
         super(x, y, radius, p);
         originalColor = p;
+        originalRadius = radius;
         this.setMoveDegree(moveDegree);
         this.rootStage = rootStage;
-    }
-
-    public double getExplosionRate() {
-        return explosionRate;
-    }
-
-    public void setExplosionRate(double explosionRate) {
-        this.explosionRate = explosionRate;
     }
 
     public boolean isExploded() {
@@ -39,7 +31,7 @@ public class MovableCircle extends Circle {
     public void explode() {
         this.exploded = true;
         this.setFill(Paint.valueOf("#AA3939"));
-        this.setRadius(this.getRadius() * this.getExplosionRate());
+        this.setRadius(this.getRadius() * Setting.EXPLOSION_SIZE_MULTIPLIER);
     }
 
     public double getMoveDegree() {
@@ -51,7 +43,7 @@ public class MovableCircle extends Circle {
     }
 
     public boolean tickExploded() {
-        if (explosionTick > maxExplosionTicks)
+        if (explosionTick > Setting.EXPLOSION_DURATION_TICKS)
             return true;
         explosionTick++;
         return false;
@@ -115,7 +107,7 @@ public class MovableCircle extends Circle {
         this.setCenterY(r.nextDouble() * this.rootStage.getScene().getHeight());
         this.exploded = false;
         this.setFill(originalColor);
-        this.setRadius(this.getRadius() / this.getExplosionRate());
+        this.setRadius(originalRadius);
         this.explosionTick = 0;
 
     }

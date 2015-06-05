@@ -9,14 +9,14 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     public Stage getRootStage() {
-        return RootStage;
+        return rootStage;
     }
 
     public void setRootStage(Stage rootStage) {
-        RootStage = rootStage;
+        this.rootStage = rootStage;
     }
 
-    private Stage RootStage;
+    private Stage rootStage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -24,10 +24,10 @@ public class Main extends Application {
 
         FXMLLoader loader = new FXMLLoader();
 
-        loader.setLocation(getClass().getResource("sample.fxml"));
+        loader.setLocation(getClass().getResource("/fxml/Game.fxml"));
         Parent root = loader.load();
         primaryStage.setTitle("Collision Ball Incremental");
-        primaryStage.setScene(new Scene(root, 600, 480));
+        primaryStage.setScene(new Scene(root, Setting.SCENE_WIDTH, Setting.SCENE_HEIGHT));
         primaryStage.setResizable(true);
         primaryStage.show();
 

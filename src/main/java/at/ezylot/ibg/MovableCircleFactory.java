@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 import java.security.SecureRandom;
 import java.util.Random;
 
-public class MovableCircleFactory {
+public final class MovableCircleFactory {
     private MovableCircleFactory() {
 
     }
