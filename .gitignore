@@ -6,4 +6,3 @@ lib
 *.iws
 .gradle/
 build/
-gradle/
